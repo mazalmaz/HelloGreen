@@ -1,7 +1,9 @@
 <template>
   
     <VHeader/>
-    <VFrontpage/>
+    
+       <VFrontpage/>
+
     <VFooter/>
 
 

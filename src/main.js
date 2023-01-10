@@ -2,9 +2,14 @@ import { createApp } from 'vue'
 import './assets/css/normalize.css'
 import './assets/fonst/stylesheet.css'
 import './assets/css/main.css'
-import App from './App.vue'
+import app from './App.vue'
+import store   from './vuex/store';
 
 
-createApp(App)
+createApp(app).use(store).mount('#app')
 
-.mount('#app')
+
+
+
+
+
