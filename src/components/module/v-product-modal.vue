@@ -1,5 +1,5 @@
 <template>
-  <div class="product-modal" v-if="show">
+  <div class="product-modal" ref="modal">
     <div class="product-modal__wrap">
       <div class="product-modal__pic">
         <img :src="product.image" alt="" />
@@ -14,7 +14,7 @@
               <span class="product-modal__item__tag no-milk">
                 <svg
                   width="20"
-                  height="16"
+                  height="20"
                   viewBox="0 0 20 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -37,11 +37,12 @@
                     stroke-width="1.3"
                   ></path>
                 </svg>
+                milk free
               </span>
               <span class="product-modal__item__tag vegetarian">
                 <svg
                   width="18"
-                  height="14"
+                  height="18"
                   viewBox="0 0 18 14"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -63,13 +64,54 @@
                     fill="#86D13F"
                   ></path>
                 </svg>
+                vegan
               </span>
             </span>
 
-            <span class="product-modal__price"> {{ product.price }} ₽</span>
+            <span class="product-modal__price"> {{ product.price }} 
+              <svg
+                fill="#000000"
+                width="20px"
+                height="20px"
+                viewBox="0 0 20 20"
+                id="ruble"
+                data-name="Flat Line"
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon flat-line"
+              >
+                <path
+                  id="primary"
+                  d="M14,11H9V3h5a4,4,0,0,1,4,4h0A4,4,0,0,1,14,11ZM9,3V21"
+                  style="
+                    fill: none;
+                    stroke: rgb(0, 0, 0);
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                    stroke-width: 2;
+                  "
+                ></path>
+                <line
+                  id="primary-2"
+                  data-name="primary"
+                  x1="6"
+                  y1="15"
+                  x2="15"
+                  y2="15"
+                  style="
+                    fill: none;
+                    stroke: rgb(0, 0, 0);
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                    stroke-width: 2;
+                  "
+                ></line>
+              </svg>
+            </span>
           </span>
 
-          <span class="product-modal__width"> 240 гр. 300 ккал</span>
+          <span class="product-modal__width">
+            240 гр. {{ product.nutritionalValue.calories }} ккал
+          </span>
 
           <div class="product-modal__label">Убрать ингредиенты</div>
 
@@ -106,82 +148,47 @@
             </li>
             <li>
               <label>
-                <input type="checkbox" name="ingredient-6" value="" />
+                <input type="checkbox" name="ingredient-6" value="" disabled />
                 <span>Тыква</span>
               </label>
             </li>
             <li>
               <label>
-                <input type="checkbox" name="ingredient-7" value="" />
+                <input type="checkbox" name="ingredient-7" value="" disabled/>
                 <span> Нут</span>
               </label>
             </li>
             <li>
               <label>
-                <input type="checkbox" name="ingredient-8" value="" />
+                <input type="checkbox" name="ingredient-8" value="" disabled />
                 <span> Лук</span>
               </label>
             </li>
           </ul>
 
-          <div class="product-modal__label">Добавки</div>
+          <div v-if="product.additionalOptions.length">
+            <div class="product-modal__label">Добавки</div>
 
-          <ul class="product-modal__supplement">
-            <li>
-              <label>
-                <input type="checkbox" name="ingredient-2" value="" />
-                <div>
-                  <img src="../../assets/img/olives.png" alt="" />
-                  <span>маслины</span>
-                  <span>+ 49 ₽</span>
-                </div>
-              </label>
-            </li>
-            <li>
-              <label>
-                <input type="checkbox" name="ingredient-2" value="" />
-                <div>
-                  <img src="../../assets/img/champignon.png" alt="" />
-                  <span>шампиньон</span>
-                  <span>+ 29 ₽</span>
-                </div>
-              </label>
-            </li>
-            <li>
-              <label>
-                <input type="checkbox" name="ingredient-2" value="" />
-                <div>
-                  <img src="../../assets/img/jalapeno.png" alt="" />
-                  <span>халапеньо</span>
-                  <span>+ 39 ₽</span>
-                </div>
-              </label>
-            </li>
-            <li>
-              <label>
-                <input type="checkbox" name="ingredient-2" value="" />
-                <div>
-                  <img src="../../assets/img/olives.png" alt="" />
-                  <span>маслины</span>
-                  <span>+ 49 ₽</span>
-                </div>
-              </label>
-            </li>
-            <li>
-              <label>
-                <input type="checkbox" name="ingredient-2" value="" />
-                <div>
-                  <img src="../../assets/img/champignon.png" alt="" />
-                  <span>шампиньон</span>
-                  <span>+ 29 ₽</span>
-                </div>
-              </label>
-            </li>
-          </ul>
+            <ul class="product-modal__supplement">
+              <li
+                v-for="(additional, index) in product.additionalOptions"
+                :key="index"
+              >
+                <label>
+                  <input type="checkbox" name="ingredient-2" value="" />
+                  <div>
+                    <img :src="additional.image" alt="" />
+                    <span>{{ additional.name }}</span>
+                    <span>+ {{ additional.price }} ₽</span>
+                  </div>
+                </label>
+              </li>
+            </ul>
+          </div>
         </div>
         <span class="product-modal__soon">Скоро будет доставка</span>
 
-        <span class="product-modal__close" @click="show = false"></span>
+        <span class="product-modal__close" @click="closeProductPopUp"></span>
       </div>
     </div>
   </div>
@@ -198,11 +205,24 @@ export default {
         return {};
       },
     },
-    show: false,
     category: "",
   },
 
+  mounted() {
+    let vm = this;
+    addEventListener("click", function(item) {
+      if(vm.$refs.modal === item.target) {
+        vm.closeProductPopUp();
+      }
+    })
+    
+  },
+  
+ 
   methods: {
+    closeProductPopUp() {
+      this.$emit("closeProductPopUp")
+    }
     // productPopUpClick(e) {
     //   let el = this.$refs.dropdown;
     //   let target = e.target;
@@ -216,7 +236,6 @@ export default {
 
 
 <style lang="scss">
-
 /* popup product */
 .product-modal {
   position: fixed;
@@ -241,15 +260,24 @@ export default {
   justify-content: space-between;
 }
 
-
+.product-modal__item__tags {
+  display: flex;
+}
 
 .product-modal__item__tag {
-  margin-right: 10px;
+  margin-right: 14px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+.product-modal__item__tag > svg {
+  margin: 3px;
 }
 .product-modal__pic {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   > img {
     max-height: 100%;
     max-width: 100%;
@@ -275,7 +303,7 @@ export default {
   font-size: 1.5rem;
   line-height: 2rem;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.9rem;
 }
 .product-modal__width {
   display: block;
@@ -306,7 +334,7 @@ export default {
     > label {
       > span {
         background: #f6faf9;
-        border-radius: 30px;
+        border-radius: 25px;
         display: flex;
         height: 40px;
         align-items: center;
@@ -314,10 +342,37 @@ export default {
         font-size: 14px;
         padding-right: 16px;
         cursor: pointer;
+        user-select: none;
       }
       > input {
         display: none;
+
         &:checked {
+          + {
+            span {
+              text-decoration: line-through;
+              &::after {
+                content: url(../../assets/img/upload.svg);
+                margin-left: 4px;
+              }
+            }
+          }
+        }
+
+        &:disabled {
+          + {
+            span {
+              font-weight: normal;
+              padding-left: 8px;
+              cursor: default;
+              &::after {
+                display: none;
+              }
+            }
+          }
+        }
+
+        & {
           + {
             span {
               padding-right: 8px;
@@ -329,6 +384,8 @@ export default {
             }
           }
         }
+
+
       }
     }
   }
@@ -347,16 +404,23 @@ export default {
           + {
             div {
               border: 2px solid rgba(94, 70, 125, 0.4);
+              position: relative;
               box-shadow: 0px 33px 80px rgba(104, 156, 165, 0.1),
                 0px 9.94853px 24.1177px rgba(104, 156, 165, 0.0651589),
                 0px 4.13211px 10.0172px rgba(104, 156, 165, 0.05),
                 0px 1.4945px 3.62304px rgba(104, 156, 165, 0.0348411);
             }
+            div:after {
+              content: url(../../assets/img/check.svg);
+              position: absolute;
+              right: 8px;
+              top: 8px;
+            }
           }
         }
       }
       > div {
-        background: #f6faf9;
+        background: #fff;
         border: 2px solid rgba(0, 0, 0, 0.08);
         box-shadow: 0px 33px 80px rgba(104, 156, 165, 0.1),
           0px 9.94853px 24.1177px rgba(104, 156, 165, 0.0651589),
@@ -364,7 +428,7 @@ export default {
           0px 1.4945px 3.62304px rgba(104, 156, 165, 0.0348411);
         border-radius: 20px;
         width: 116px;
-        height: 111px;
+        height: 131px;
         display: flex;
         align-items: flex-end;
         justify-content: flex-end;
@@ -386,6 +450,22 @@ export default {
           position: absolute;
           left: -20px;
           top: -15px;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 720px) {
+  .product-modal__supplement {
+    > li {
+      margin-right: 0.3rem;
+      width: calc(33.333% - 0.3rem);
+      > label {
+        > div {
+          width: 100%;
+          > span {
+            font-size: 12px;
+          }
         }
       }
     }
@@ -424,7 +504,7 @@ export default {
     max-width: 100%;
     height: auto;
     width: calc(100% - 20px);
-  }  
+  }
   .product-modal__intro {
     padding: 1.5rem;
     width: 100%;
@@ -433,8 +513,6 @@ export default {
   .product-modal__title {
     font-size: 1.2rem;
     line-height: 1.2rem;
-
   }
 }
-
 </style>

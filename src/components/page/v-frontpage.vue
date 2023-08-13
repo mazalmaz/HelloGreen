@@ -1,11 +1,12 @@
 <template>
   <main class="main frontpage">
+    
     <div class="container">
-
+      
       <VSwiper />
       <VCategory />
       <VProductList />
- 
+
     </div>
   </main>
 

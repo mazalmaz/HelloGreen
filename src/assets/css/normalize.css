@@ -26,6 +26,7 @@ button:focus {
 }
 img {
   display: block;
+  max-width: 100%;
 }
 
 ul,
@@ -48,6 +49,19 @@ ol li {
 
 a {text-decoration: none;color: #000}
 
+.cat-box[id] {
+  position: relative;
+}
+
+.cat-box[id]:before {
+  display: block;
+  content: " ";
+  margin-top: -90px;
+  height: 90px;
+  position: relative;
+  z-index: -1;
+  visibility: hidden;
+}
 
 /* Sections
    ========================================================================== */

@@ -1,18 +1,25 @@
 <template>
   <header class="header" @scroll="handleScroll">
     <div class="container">
-      <a href="#" class="header__logo">
+      <a href="/" class="header__logo">
         <img src="../../assets/img/logo.svg" alt="" />
       </a>
       <div class="header__menu">
-        <ul class="header__list">
-          <li v-for="(item, index) in menuList" :key="index"><a href="#">{{item}}</a></li>
-        </ul>н
+        <router-link to="/">Меню</router-link>
+        <router-link to="/action">Акции</router-link>
+        <router-link to="/restaurants">Рестораны</router-link>
+        <router-link to="/about">О Hello Geen</router-link>
+
+        <!-- <ul class="header__list">
+          <li v-for="(item, index) in menuList" :key="index">
+            <a href="#">{{ item }}</a>
+          </li>
+        </ul> -->
       </div>
-      <div class="header__lk">
+      <!-- <div class="header__lk">
         <span class="header__notificat"></span>
         <span class="header__login"></span>
-      </div>
+      </div> -->
       <div class="menu-btn" @click="openMenu" :class="{ active: isActive }">
         <span></span>
         <span></span>
@@ -22,30 +29,17 @@
   </header>
   <div class="mobile-menu" v-if="isActive">
     <div class="mobile-menu__wrap">
-      <span class="mobile-menu__close" @click="isActive = !this.isActive"> </span>
+      <span class="mobile-menu__close" @click="isActive = !this.isActive"></span>
       <!-- <div class="mobile-menu__btn">
         <span class="mobile-menu__notificat"></span>
         <span class="mobile-menu__login"></span>
       </div> -->
-      <ul class="mobile-menu__list">
-         <li v-for="(item, index) in menuList" :key="index"><a href="#">{{item}}</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="menu-fixed" v-if="isMenufix">
-    <div class="container">
-      <div class="menu-fixed__lt">
-        <a href="#" class="menu-fixed__logo">
-          <img src="../../assets/img/logo.svg" alt="" />
-        </a>
-        <ul class="menu-fixed__list">
-          <li class="active"><a href="#categoty_0">Супы</a></li>
-          <li><a href="#categoty_1">Салаты</a></li>
-          <li><a href="#categoty_2">Десерты</a></li>
-        </ul>
+      <div class="mobile-menu__list">
+        <router-link to="/" @click="isActive = false">Меню</router-link>
+        <router-link to="/action" @click="isActive = false">Акции</router-link>
+        <router-link to="/restaurants" @click="isActive = false">Рестораны</router-link>
+        <router-link to="/about" @click="isActive = false">О Hello Geen</router-link>
       </div>
-      <span class="menu-fixed__burger"></span>
     </div>
   </div>
 </template>
@@ -55,23 +49,18 @@ export default {
   name: "VHeader",
   data() {
     return {
-      menuList: [
-        "Меню",
-        "Акции",
-        "Рестораны",
-        "О Hello Green", 
-      ],
-      isMenufix: false,
+      menuList: ["Меню", "Акции", "Рестораны", "О Hello Green"],
+      // isMenufix: false,
       isActive: false,
     };
   },
 
-  created() {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
-  },
+  // created() {
+  //   window.addEventListener("scroll", this.handleScroll);
+  // },
+  // destroyed() {
+  //   window.removeEventListener("scroll", this.handleScroll);
+  // },
 
   methods: {
     openMenu: function () {
@@ -80,14 +69,14 @@ export default {
       console.log(document.body);
     },
 
-    handleScroll: function (evt, el) {
-      if (window.scrollY > 100) {
-        this.isMenufix = true;
-      } else {
-        this.isMenufix = false;
-      }
-      // return window.scrollY > 100
-    },
+    // handleScroll: function (evt, el) {
+    //   if (window.scrollY > 100) {
+    //     this.isMenufix = true;
+    //   } else {
+    //     this.isMenufix = false;
+    //   }
+    //   // return window.scrollY > 100
+    // },
   },
 
   mounted() {
@@ -125,6 +114,19 @@ export default {
     > .container {
       height: 89px;
     }
+  }
+
+  &__menu {
+    display: flex;
+    > a {
+      margin-right: 37px;
+    }
+    > 
+    a.active {
+      font-weight: bold;
+    }
+
+
   }
 
   &__lk {
@@ -169,7 +171,8 @@ export default {
 
   @media (max-width: 1024px) {
     &__list,
-    &__lk {
+    &__lk,
+    &__menu {
       display: none;
     }
   }
@@ -245,8 +248,7 @@ export default {
   bottom: 0;
   right: 0;
   background: rgba(23, 23, 23, 0.6);
-  z-index: 200;
-  
+  z-index: 2000;
 
   &__close {
     width: 42px;
@@ -268,8 +270,8 @@ export default {
     position: absolute;
     height: calc(100% - 20px);
     display: flex;
-  align-items: center;
-  padding-left: 48px;
+    align-items: center;
+    padding-left: 48px;
   }
 
   &__btn {
@@ -296,68 +298,13 @@ export default {
   }
 
   &__list {
-    > li {
+    display: flex;
+    flex-direction: column;
+    > a {
+      font-weight: 600;
+      font-size: 24px;
       margin-bottom: 40px;
-      > a {
-        font-weight: 600;
-        font-size: 24px;
-      }
-    }
-  }
-}
-
-.menu-fixed {
-  position: fixed;
-  width: 100%;
-  left: 0;
-  top: 0;
-  z-index: 250;
-  background: #ffffff;
-  box-shadow: 0px 16px 72px rgba(169, 169, 169, 0.24);
-
-  > .container {
-    height: 78px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  &__burger {
-    width: 42px;
-    height: 42px;
-    cursor: pointer;
-    background: url(../../assets/img/burder.svg) no-repeat;
-  }
-  &__logo {
-    margin-right: 40px;
-  }
-  &__lt {
-    display: flex;
-    align-items: center;
-  }
-
-  &__list {
-    display: flex;
-    > li {
-      margin-right: 8px;
-      > a {
-        display: flex;
-        background: rgba(150, 194, 179, 0.1);
-        border-radius: 30px;
-        height: 48px;
-        align-items: center;
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-      a:hover,
-      a.active {
-        background: #5e467d;
-        color: #fff;
-      }
-    }
-  }
-  @media (max-width: 720px) {
-    &__list {
-      display: none;
+      
     }
   }
 }

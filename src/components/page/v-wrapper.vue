@@ -2,7 +2,7 @@
   
     <VHeader/>
     
-       <VFrontpage/>
+        <router-view />
 
     <VFooter/>
 

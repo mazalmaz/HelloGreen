@@ -12,7 +12,7 @@ body {
     height: 100%;
     position: relative;
     color: #000;
-    background: #fff;
+    background:#fff;
 }
 
 /* универсальные стили */
@@ -22,7 +22,7 @@ body {
 }
 
 .container {
-    max-width: 1920px;
+    max-width: 1440px;
     padding-left: 30px;
     padding-right: 30px;
     position: relative;
@@ -49,15 +49,14 @@ body {
 
 
 .frontpage__title {
-    font-size: 2.25rem;
-    margin-bottom: 1.25rem;
+    font-size: 36px;
+    margin-bottom: 40px;
 }
 
 @media (max-width: 720px) {
     .frontpage__title {
-        font-size: 1.8rem;
-    margin-bottom: 0.8rem;
-    }    
+        font-size: 26px;
+    margin-bottom: 1.9rem;    }    
 }
 
 

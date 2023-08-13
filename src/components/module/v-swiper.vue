@@ -26,6 +26,7 @@
           </div>
           <img :src="slide.pic" alt="" class="swiper-slide__pic" />
         </div>
+        
       </swiper-slide>
     </swiper>
     <div ref="prev" class="swiper-button__prev"></div>
@@ -35,6 +36,7 @@
       class="swiper-slide__popup swiper-popup"
       v-if="show"
       @click="popUpClick"
+      ref="modal"
     >
       <div class="swiper-popup__wrap">
         <span class="swiper-popup__close" @click="sliderPopUpHide"></span>
@@ -67,12 +69,17 @@ import { ref } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import { Navigation } from "swiper";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "VSwiper",
   components: {
     Swiper,
     SwiperSlide,
+  },
+
+  computed: {
+    // ...mapState(["actions"]),
   },
 
   data: function () {
@@ -108,6 +115,18 @@ export default {
       },
     };
   },
+  
+  mounted() {
+    let vm = this;
+
+    addEventListener("click", function(item) {
+      if(vm.$refs.modal === item.target) {
+        vm.show = false;
+      }
+    })
+    
+  },
+
   setup() {
     const prev = ref(null);
     const next = ref(null);
@@ -126,6 +145,7 @@ export default {
     };
   },
   methods: {
+    // ...mapActions(["GET_ACTIONS_LIST_FROM_API"]),
     sliderPopUpShow() {
       this.show = true;
     },
@@ -134,11 +154,7 @@ export default {
       this.show = false;
     },
     popUpClick(e) {
-      let el = this.$refs.dropdown;
-      let target = e.target;
-      if (el !== target) {
-        this.show = false;
-      }
+      
     },
   },
 };
@@ -148,6 +164,9 @@ export default {
 .frontpage__swiper {
   position: relative;
 }
+
+
+
 
 .swiper-slide__item {
   background: #dddc8e;
@@ -161,6 +180,7 @@ export default {
   cursor: pointer;
   user-select: none;
   overflow: hidden;
+ 
   > div {
     position: relative;
     z-index: 10;
@@ -208,12 +228,13 @@ export default {
   top: calc(50% - 29px);
   z-index: 100;
   left: -21px;
+  box-shadow: 0px 16px 24px rgba(94, 70, 125, 0.32);
   &:hover {
     background: #5e467d url(../../assets/img/arrow_hover.svg) no-repeat 14px
       center;
-    box-shadow: 0px 16px 24px rgba(94, 70, 125, 0.32);
   }
 }
+
 .swiper-button__next {
   background: #ffffff url(../../assets/img/arrow.svg) no-repeat 14px center;
   border-radius: 20px;
@@ -224,13 +245,19 @@ export default {
   top: calc(50% - 29px);
   z-index: 100;
   right: -21px;
+  box-shadow: 0px 16px 24px rgba(94, 70, 125, 0.32);
   transform: rotate(-180deg);
   &:hover {
     background: #5e467d url(../../assets/img/arrow_hover.svg) no-repeat 14px
       center;
-    box-shadow: 0px 16px 24px rgba(94, 70, 125, 0.32);
+    
   }
 }
+
+.swiper-button-disabled {
+  display: none;
+}
+
 .swiper-popup {
   position: fixed;
   width: 100%;
